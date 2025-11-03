@@ -1,0 +1,43 @@
+<div class="driver-list">
+  <h2>Driver Management</h2>
+
+  <div class="list-header">
+    <div>S.No</div>
+    <div>Name</div>
+    <div>Phone</div>
+    <div>License</div>
+    <div>Experience</div>
+    <div>Available</div>
+    <div>Actions</div>
+  </div>
+
+  <ul>
+    <li *ngFor="let d of drivers; let i = index">
+      <div>{{ i + 1 }}</div>
+      <div>{{ d.name }}</div>
+      <div>{{ d.phone }}</div>
+      <div>{{ d.drivingLicense }}</div>
+      <div>{{ d.experienceYears }}</div>
+      <div>{{ d.isAvailable ? 'Yes' : 'No' }}</div>
+      <div>
+        <button (click)="editDriver(d)">Edit</button>
+        <button (click)="deleteDriver(d.id!)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="driver-form">
+  <h3>{{ editMode ? 'Edit Driver' : 'Add Driver' }}</h3>
+  <form (ngSubmit)="saveDriver()">
+    <input [(ngModel)]="driver.name" name="Name" placeholder="Name" required />
+    <input [(ngModel)]="driver.phone" name="Phone" placeholder="Phone" required />
+    <input [(ngModel)]="driver.drivingLicense" name="DrivingLicense" placeholder="License" required />
+    <input [(ngModel)]="driver.experienceYears" name="ExperienceYears" type="number" placeholder="Experience (Years)" required />
+    <label>
+      Available:
+      <input type="checkbox" [(ngModel)]="driver.isAvailable" name="IsAvailable"/>
+    </label>
+    <button type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
+  </form>
+</div>

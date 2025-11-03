@@ -1,0 +1,198 @@
+/* 🌈 Full page layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 40px 60px;
+  gap: 40px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #20002c, #6f0000, #ff6a00);
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}
+
+/* 🚗 Left panel — Trip List */
+.trip-list {
+  flex: 2;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 18px;
+  padding: 25px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.8s ease;
+}
+
+.trip-list h2 {
+  text-align: center;
+  color: #00d2ff;
+  margin-bottom: 25px;
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 8px rgba(0, 210, 255, 0.6);
+}
+
+/* 🧾 Table header */
+.list-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 1fr 1fr 120px 160px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: 0 5px 15px rgba(38, 108, 255, 0.4);
+}
+
+/* 🚦 Trip items */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 1fr 1fr 120px 160px;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  border-radius: 12px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  cursor: pointer;
+}
+
+li:hover {
+  transform: translateY(-4px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+  box-shadow: 0 6px 20px rgba(0, 210, 255, 0.3);
+}
+
+/* Buttons inside list */
+li button {
+  margin: 0 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: white;
+}
+
+li button:first-child {
+  background: #00b894;
+}
+
+li button:last-child {
+  background: #d63031;
+}
+
+li button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+/* 🧾 Right panel — Add/Edit Form */
+.trip-form {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.8s ease;
+}
+
+.trip-form h3 {
+  text-align: center;
+  color: #00d2ff;
+  font-size: 26px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 10px rgba(0, 210, 255, 0.5);
+}
+
+.trip-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trip-form input,
+.trip-form select {
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 15px;
+  transition: all 0.25s ease;
+}
+
+.trip-form input:focus,
+.trip-form select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 8px #00d2ff;
+}
+
+/* Submit Button */
+.trip-form button {
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.trip-form button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(58, 123, 213, 0.4);
+}
+
+/* ✨ Status badges */
+li div:nth-child(6) {
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+li div:nth-child(6)[innerText="Completed"] {
+  background-color: #28a745;
+  color: #fff;
+}
+
+li div:nth-child(6)[innerText="Pending"] {
+  background-color: #ff9f1a;
+  color: #fff;
+}
+
+li div:nth-child(6)[innerText="Cancelled"] {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* ✨ Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}

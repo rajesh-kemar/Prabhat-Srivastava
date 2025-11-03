@@ -1,0 +1,46 @@
+<div class="vehicle-list">
+  <h2>Vehicle Management</h2>
+
+  <div class="list-header">
+    <div>S.No</div>
+    <div>Number Plate</div>
+    <div>Type</div>
+    <div>Capacity</div>
+    <div>Source</div>
+    <div>Destination</div>
+    <div>Available</div>
+    <div>Actions</div>
+  </div>
+
+  <ul>
+    <li *ngFor="let v of vehicles; let i = index">
+      <div>{{ i + 1 }}</div>
+      <div>{{ v.numberPlate }}</div>
+      <div>{{ v.type }}</div>
+      <div>{{ v.capacity }}</div>
+      <div>{{ v.source }}</div>
+      <div>{{ v.destination }}</div>
+      <div>{{ v.isAvailable ? 'Yes' : 'No' }}</div>
+      <div>
+        <button (click)="editVehicle(v)">Edit</button>
+        <button (click)="deleteVehicle(v.id!)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="vehicle-form">
+  <h3>{{ editMode ? 'Edit Vehicle' : 'Add Vehicle' }}</h3>
+  <form (ngSubmit)="saveVehicle()">
+    <input [(ngModel)]="vehicle.numberPlate" name="NumberPlate" placeholder="Number Plate" required/>
+    <input [(ngModel)]="vehicle.type" name="Type" placeholder="Type" required/>
+    <input [(ngModel)]="vehicle.capacity" name="Capacity" type="number" placeholder="Capacity" required/>
+    <input [(ngModel)]="vehicle.source" name="Source" placeholder="Source" required/>
+    <input [(ngModel)]="vehicle.destination" name="Destination" placeholder="Destination" required/>
+    <label>
+      Available:
+      <input type="checkbox" [(ngModel)]="vehicle.isAvailable" name="IsAvailable"/>
+    </label>
+    <button type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
+  </form>
+</div>

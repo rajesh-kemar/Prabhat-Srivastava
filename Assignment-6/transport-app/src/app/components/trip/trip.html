@@ -1,0 +1,57 @@
+<div class="trip-list">
+  <h2>Trip Management</h2>
+
+  <div class="list-header">
+    <div>S.No</div>
+    <div>Driver</div>
+    <div>Vehicle</div>
+    <div>Source</div>
+    <div>Destination</div>
+    <div>Status</div>
+    <div>Actions</div>
+  </div>
+
+  <ul>
+    <li *ngFor="let t of trips; let i = index">
+      <div>{{ i + 1 }}</div>
+      <div>{{ t.driverId }}</div>
+      <div>{{ t.vehicleId }}</div>
+      <div>{{ t.source }}</div>
+      <div>{{ t.destination }}</div>
+      <div>{{ t.status }}</div> <!-- <-- Status from backend -->
+      <div>
+        <button (click)="editTrip(t)">Edit</button>
+        <button (click)="deleteTrip(t.id!)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="trip-form">
+  <h3>{{ editMode ? 'Edit Trip' : 'Add Trip' }}</h3>
+  <form (ngSubmit)="saveTrip()">
+    <label>Driver</label>
+    <select [(ngModel)]="trip.driverId" name="DriverId" required>
+      <option *ngFor="let d of drivers" [value]="d.id">{{ d.Name }}</option>
+    </select>
+
+    <label>Vehicle</label>
+    <select [(ngModel)]="trip.vehicleId" name="VehicleId" required>
+      <option *ngFor="let v of vehicles" [value]="v.id">{{ v.NumberPlate }}</option>
+    </select>
+
+    <label>Start Time</label>
+    <input [(ngModel)]="trip.startTime" name="StartTime" type="datetime-local" required />
+
+    <label>End Time</label>
+    <input [(ngModel)]="trip.endTime" name="EndTime" type="datetime-local" />
+
+    <label>Source</label>
+    <input [(ngModel)]="trip.source" name="Source" placeholder="Source" required />
+
+    <label>Destination</label>
+    <input [(ngModel)]="trip.destination" name="Destination" placeholder="Destination" required />
+
+    <button type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
+  </form>
+</div>
