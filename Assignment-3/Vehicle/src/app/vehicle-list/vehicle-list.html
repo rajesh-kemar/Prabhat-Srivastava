@@ -1,0 +1,29 @@
+<div class="main-layout">
+  <div class="list-panel">
+    <h2>Vehicle List</h2>
+
+    <div class="filter-section">
+      <label *ngFor="let status of allStatuses" style="display: block; margin-bottom: 8px;">
+        <input
+          type="checkbox"
+          [value]="status"
+          (change)="toggleStatusFilter(status, $event.target.checked)"
+          [checked]="selectedStatuses.includes(status)"
+        />
+        {{ status }}
+      </label>
+    </div>
+
+    <ul>
+      <li *ngFor="let vehicle of filteredVehicles"
+          (click)="selectVehicle(vehicle)"
+          [class.selected]="vehicle === selectedVehicle">
+        {{ vehicle.numberPlate }} - {{ vehicle.status }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="detail-panel" *ngIf="selectedVehicle">
+    <app-vehicle-detail [vehicle]="selectedVehicle"></app-vehicle-detail>
+  </div>
+</div>
