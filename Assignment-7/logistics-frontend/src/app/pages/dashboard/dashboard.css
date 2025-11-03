@@ -1,0 +1,110 @@
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  color: #333;
+}
+
+/* Dashboard Container */
+div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+/* Stat Cards */
+.dashboard-card {
+  flex: 1 1 200px; /* Responsive sizing */
+  min-width: 250px;
+  max-width: 250px;
+  background: linear-gradient(135deg, #007BFF, #00c6ff);
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px 25px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center content vertically */
+  height: 150px; /* Set a fixed height for each card */
+  overflow: hidden; /* Prevent text overflow */
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Heading Style for Cards */
+.dashboard-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-transform: uppercase; /* Make headings uppercase for better readability */
+  flex-shrink: 0; /* Prevent heading from shrinking */
+}
+
+/* Number Style for Cards */
+.dashboard-card p {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  flex-shrink: 0; /* Prevent number from shrinking */
+}
+
+/* Colors for specific stats */
+.active-trips { 
+  background: linear-gradient(135deg, #FF6B6B, #FF4757);
+}
+
+.completed-trips {
+  background: linear-gradient(135deg, #1DD1A1, #10AC84);
+}
+
+.total-vehicles {
+  background: linear-gradient(135deg, #FFD93D, #FFB82B);
+}
+
+.available-vehicles {
+  background: linear-gradient(135deg, #54a0ff, #2e86de);
+}
+
+.available-drivers {
+  background: linear-gradient(135deg, #f368e0, #e84393);
+}
+
+/* Responsive Styles */
+@media (max-width: 900px) {
+  .dashboard-card {
+    flex: 1 1 45%; /* Cards will take up 45% width on medium screens */
+    max-width: none; /* Remove max-width for flexibility */
+  }
+}
+
+@media (max-width: 500px) {
+  .dashboard-card {
+    flex: 1 1 100%; /* Full width for cards on smaller screens */
+  }
+
+  /* Adjust font size for smaller screens */
+  .dashboard-card h3 {
+    font-size: 1rem;
+  }
+
+  .dashboard-card p {
+    font-size: 1.8rem;
+  }
+}

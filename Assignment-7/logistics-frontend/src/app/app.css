@@ -1,0 +1,113 @@
+/* ===== Global Body Styles ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  color: #333;
+}
+
+/* ===== Navigation Bar ===== */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  background-color: #1e1e2f;
+  padding: 15px 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Navigation Links */
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  position: relative;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for links */
+nav a:hover {
+  color: #00bcd4;
+  transform: scale(1.1);
+}
+
+/* Animated underline effect */
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -3px;
+  left: 0;
+  background-color: #00bcd4;
+  transition: width 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Separator between links */
+nav a + a::before {
+  content: '|';
+  color: #ccc;
+  margin: 0 10px;
+}
+
+/* ===== Router Outlet Container ===== */
+router-outlet + * {
+  display: block;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ===== Fade In Animation ===== */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive for Mobile ===== */
+@media screen and (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 0;
+  }
+
+  nav a + a::before {
+    content: '';
+    margin: 0;
+  }
+}
+
+/* ===== Optional: Global Typography Effects ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: #1e1e2f;
+  margin-bottom: 15px;
+}
+
+p {
+  line-height: 1.6;
+  color: #555;
+  font-size: 1rem;
+}

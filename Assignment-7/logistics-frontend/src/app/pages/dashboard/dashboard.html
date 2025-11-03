@@ -1,0 +1,48 @@
+<div class="bground">
+  <h2 class="dashboard-title">Dashboard Overview</h2>
+
+  <div class="dashboard-grid">
+
+    <!-- Active Trips -->
+    <div class="dashboard-card active-trips" (click)="navigateTo('trips', 'active')">
+      <h3>Active Trips</h3>
+      <p>{{ activeTrips }}</p>
+      <!-- <span class="card-footer">View Active Trips →</span> -->
+    </div>
+
+    <!-- Completed Trips -->
+    <div class="dashboard-card completed-trips" (click)="navigateTo('trips', 'completed')">
+      <h3>Completed Trips</h3>
+      <p>{{ completedTrips }}</p>
+      <!-- <span class="card-footer">View Completed Trips →</span> -->
+    </div>
+
+    <!-- Total Vehicles -->
+    <div class="dashboard-card total-vehicles" (click)="navigateTo('vehicles', 'all')">
+      <h3>Total Vehicles</h3>
+      <p>{{ totalVehicles }}</p>
+      <!-- <span class="card-footer">View All Vehicles →</span> -->
+    </div>
+
+    <!-- Available Vehicles -->
+    <div class="dashboard-card available-vehicles" (click)="navigateTo('vehicles', 'available')">
+      <h3>Available Vehicles</h3>
+      <p>{{ availableVehicles }}</p>
+      <!-- <span class="card-footer">View Available Vehicles →</span> -->
+    </div>
+
+    <!-- ✅ Total Drivers -->
+    <div class="dashboard-card total-drivers" (click)="navigateTo('drivers', 'all')">
+      <h3>Total Drivers</h3>
+      <p>{{ totalDrivers }}</p>
+    </div>
+
+    <!-- Available Drivers -->
+    <div class="dashboard-card available-drivers" (click)="navigateTo('drivers', 'available')">
+      <h3>Available Drivers</h3>
+      <p>{{ availableDrivers }}</p>
+      <!-- <span class="card-footer">View Available Drivers →</span> -->
+    </div>
+
+  </div>
+</div>

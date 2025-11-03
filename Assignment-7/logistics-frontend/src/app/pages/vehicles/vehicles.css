@@ -1,0 +1,161 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container for the Table and Form */
+.vehicle-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px; /* Space between the table and form */
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  width: 100%;
+}
+
+/* Vehicle Form Card Styling (Left Side) */
+.vehicle-form-card {
+  width: 30%; /* Set width to 30% */
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for the form card */
+  border-radius: 8px; /* Rounded corners for the form */
+  height: auto; /* Allow dynamic height to adjust for content */
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Add gap between form elements */
+  height: 500px;
+}
+
+.vehicle-form-card h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Form Inputs and Button */
+.vehicle-form-card input,
+.vehicle-form-card button,
+.vehicle-form-card label,
+.vehicle-form-card select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Ensure form elements align well */
+.vehicle-form-card input[type="checkbox"] {
+  width: auto; /* Let checkbox retain its size */
+  margin-top: 15px;
+  margin-right: 8px; /* Add space between checkbox and label */
+  margin-bottom: 25px;
+}
+
+.vehicle-form-card button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Vehicle Form Submit Button */
+.vehicle-form-card button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px); /* Button lift effect */
+}
+
+/* Vehicle Table Styling (Right Side) */
+.vehicle-table {
+  width: 67%; /* Set width to 67% */
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for the table */
+  table-layout: fixed; /* Ensures that columns take up equal width */
+}
+
+.tablew {
+  width: 100%;
+}
+
+/* Table Headers Styling */
+.vehicle-table th,
+.vehicle-table td {
+  padding: 12px;
+  text-align: left;
+  overflow: hidden; /* Avoid text overflow */
+}
+
+.vehicle-table th {
+  background-color: #007bff;
+  color: white;
+  text-align: center; /* Center align headers */
+}
+
+/* Vehicle Table Body Rows */
+.vehicle-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Action Buttons (Edit/Delete) in Table */
+.vehicle-table button {
+  padding: 8px 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-right: 8px; /* Space between buttons */
+  margin-top: 4px; /* Small top margin */
+  display: inline-block; /* Ensure buttons are on the same line */
+}
+
+/* Edit Button (Green) */
+.vehicle-table button.edit {
+  background-color: #28a745; /* Green */
+}
+
+.vehicle-table button.edit:hover {
+  background-color: #218838; /* Darker Green */
+  transform: translateY(-3px); /* Lift effect */
+}
+
+/* Delete Button (Red) */
+.vehicle-table button.delete {
+  background-color: #dc3545; /* Red */
+}
+
+.vehicle-table button.delete:hover {
+  background-color: #c82333; /* Darker Red */
+  transform: translateY(-3px); /* Lift effect */
+}
+
+/* Adjustments for Table Columns */
+.vehicle-table th,
+.vehicle-table td {
+  width: auto; /* Let columns adjust based on content */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* Stack table and form vertically on small screens */
+  .vehicle-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .vehicle-table {
+    width: 100%;
+  }
+
+  .vehicle-form-card {
+    width: 100%;
+  }
+}

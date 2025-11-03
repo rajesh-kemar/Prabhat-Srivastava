@@ -1,0 +1,68 @@
+<h2 style="text-align: center; font-size: 30px; margin-top: 30px; font-weight: bold;">
+  Trips List
+</h2>
+
+<div class="trip-container">
+  <!-- Trip Table -->
+  <div class="trip-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Driver</th>
+          <th>Vehicle</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Duration (hrs)</th>
+          <th>Source</th>
+          <th>Destination</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of filteredTrips">
+          <td>{{ t.driver?.name || '-' }}</td>
+          <td>{{ t.vehicle?.numberPlate || '-' }}</td>
+          <td>{{ t.startTime | date:'short' }}</td>
+          <td>{{ t.endTime ? (t.endTime | date:'short') : '-' }}</td>
+          <td>{{ t.durationHours ? t.durationHours.toFixed(1) : '-' }}</td>
+          <td>{{ t.source }}</td>
+          <td>{{ t.destination }}</td>
+          <td>{{ t.endTime ? 'Completed' : 'In Progress' }}</td>
+          <td>
+            <button class="edit" (click)="editTrip(t)">Edit</button>
+            <button class="delete" (click)="deleteTrip(t.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Trip Form -->
+  <div class="trip-form-card">
+    <h2>{{ trip.id ? 'Edit' : 'Add' }} Trip</h2>
+    <form (ngSubmit)="saveTrip()" #tripForm="ngForm">
+      
+      <select [(ngModel)]="trip.driverId" name="driverId" required>
+        <option value="">Select Driver</option>
+        <option *ngFor="let d of drivers" [value]="d.id">{{ d.name }}</option>
+      </select>
+
+      <select [(ngModel)]="trip.vehicleId" name="vehicleId" required style="margin-bottom: 25px;">
+        <option value="">Select Vehicle</option>
+        <option *ngFor="let v of vehicles" [value]="v.id">{{ v.numberPlate }}</option>
+      </select>
+
+      <label>Start Time:</label>
+      <input type="datetime-local" [(ngModel)]="trip.startTime" name="startTime" required style="margin-bottom: 25px;">
+
+      <label>End Time:</label>
+      <input type="datetime-local" [(ngModel)]="trip.endTime" name="endTime">
+
+      <input [(ngModel)]="trip.source" name="source" placeholder="Source" required>
+      <input [(ngModel)]="trip.destination" name="destination" placeholder="Destination" required>
+
+      <button type="submit">{{ trip.id ? 'Update' : 'Add' }} Trip</button>
+    </form>
+  </div>
+</div>

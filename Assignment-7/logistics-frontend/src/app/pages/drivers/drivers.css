@@ -1,0 +1,176 @@
+/* ===============================
+   General Reset
+================================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   Container for Table and Form
+================================*/
+.driver-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px; /* Space between table and form */
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  width: 100%;
+}
+
+/* ===============================
+   Driver Form Card (Left Side)
+================================*/
+.driver-form-card {
+  width: 30%; /* 30% width for form */
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  border-radius: 8px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 500px;
+}
+
+.driver-form-card h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ===============================
+   Form Inputs & Buttons
+================================*/
+.driver-form-card input,
+.driver-form-card button,
+.driver-form-card label,
+.driver-form-card select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.driver-form-card input[type="checkbox"] {
+  width: auto;
+  margin-top: 15px;
+  margin-right: 8px;
+  margin-bottom: 25px;
+}
+
+.driver-form-card button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.driver-form-card button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+/* ===============================
+   Driver Table Styling (Right Side)
+================================*/
+.driver-table {
+  width: 67%; /* Table takes 67% width */
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  table-layout: fixed; /* Keeps columns consistent */
+}
+
+.tablew {
+  width: 100%;
+}
+
+/* ===============================
+   Table Headers & Cells
+================================*/
+.driver-table th,
+.driver-table td {
+  padding: 12px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.driver-table th {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+}
+
+.driver-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* ===============================
+   Action Buttons in Table
+================================*/
+.driver-table button {
+  padding: 8px 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-right: 8px;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+/* Edit Button (Green) */
+.driver-table button.edit {
+  background-color: #28a745;
+}
+
+.driver-table button.edit:hover {
+  background-color: #218838;
+  transform: translateY(-3px);
+}
+
+/* Delete Button (Red) */
+.driver-table button.delete {
+  background-color: #dc3545;
+}
+
+.driver-table button.delete:hover {
+  background-color: #c82333;
+  transform: translateY(-3px);
+}
+
+/* ===============================
+   Adjust Column Widths
+================================*/
+.driver-table th,
+.driver-table td {
+  width: auto;
+}
+
+/* ===============================
+   Responsive Design
+================================*/
+@media (max-width: 768px) {
+  .driver-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .driver-table {
+    width: 100%;
+  }
+
+  .driver-form-card {
+    width: 100%;
+  }
+}

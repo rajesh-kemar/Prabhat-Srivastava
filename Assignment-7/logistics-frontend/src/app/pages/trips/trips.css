@@ -1,0 +1,176 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container for the Table and Form */
+.trip-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  /* gap: 20px;  */
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  width: 100%;
+}
+
+/* Table Styling (Left Side) */
+.trip-table {
+  width: 70%; /* Set width to 65% */
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for the table */
+  border-radius: 8px;
+  overflow: hidden;
+  display: block;
+  overflow-x: auto; /* Scroll for smaller screens */
+}
+
+.trip-table th,
+.trip-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.trip-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.trip-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Hover effect for rows */
+.trip-table tbody tr:hover {
+  background-color: #e6f0ff; /* Light blue hover */
+  transition: background-color 0.3s ease;
+}
+
+/* Action Buttons (Edit/Delete) in Table */
+.trip-table button {
+  padding: 8px 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-right: 8px; /* Space between buttons */
+  margin-top: 4px; /* Small top margin */
+  display: inline-block; /* Ensure buttons are on the same line */
+  transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+/* Button Container Styling */
+.trip-table td button {
+  display: inline-block;
+  margin-right: 8px; /* Add space between buttons */
+}
+
+/* Edit Button (Green) */
+.trip-table button.edit {
+  background-color: #28a745; /* Green */
+}
+
+.trip-table button.edit:hover {
+  background-color: #218838; /* Darker Green */
+  transform: translateY(-3px); /* Lift effect */
+}
+
+/* Delete Button (Red) */
+.trip-table button.delete {
+  background-color: #dc3545; /* Red */
+}
+
+.trip-table button.delete:hover {
+  background-color: #c82333; /* Darker Red */
+  transform: translateY(-3px); /* Lift effect */
+}
+
+/* Form Card Styling (Right Side) */
+.trip-form-card {
+  width: 25%; 
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #eee;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  height: 550px;
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.trip-form-card h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Form Inputs and Button */
+.trip-form-card input,
+.trip-form-card button,
+.trip-form-card label,
+.trip-form-card select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.trip-form-card select {
+  width: 100%;
+}
+
+.trip-form-card input[type="datetime-local"] {
+  width: 100%;
+  color-scheme: light;
+}
+
+/* Focus states for inputs */
+.trip-form-card input:focus,
+.trip-form-card select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+/* Form Button */
+.trip-form-card button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
+}
+
+.trip-form-card button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px); /* Button lift effect */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .trip-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .trip-table {
+    width: 100%;
+  }
+
+  .trip-form-card {
+    width: 100%;
+  }
+}
