@@ -1,0 +1,69 @@
+<h2
+  style="
+    text-align: center;
+    font-size: 30px;
+    margin-top: 30px;
+    font-weight: bold;
+  "
+>
+  Drivers List
+</h2>
+
+<div class="driver-container">
+
+  <!-- Add Driver Button at Top -->
+  <div class="driver-header">
+    <button class="open-modal-btn" (click)="openModal()">+ Add Driver</button>
+  </div>
+
+  <!-- Driver Table -->
+  <div class="driver-table">
+    <table class="tablew">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>License</th>
+          <th>Experience (Years)</th>
+          <th>Available</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of filteredDrivers">
+          <td>{{ d.name }}</td>
+          <td>{{ d.phone }}</td>
+          <td>{{ d.drivingLicense }}</td>
+          <td>{{ d.experienceYears }}</td>
+          <td>{{ d.isAvailable ? 'Yes' : 'No' }}</td>
+          <td class="action-buttons">
+            <button class="edit" (click)="editDriver(d)">Edit</button>
+            <button class="delete" (click)="deleteDriver(d.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Popup -->
+  <div class="modal" [ngClass]="{'show-modal': isModalVisible}">
+    <div class="modal-content">
+      <span class="close-btn" (click)="closeModal()">&times;</span>
+      <h2>{{ driver.id ? 'Edit' : 'Add' }} Driver</h2>
+
+      <form (ngSubmit)="saveDriver()">
+        <input [(ngModel)]="driver.name" name="name" placeholder="Driver Name" required />
+        <input [(ngModel)]="driver.phone" name="phone" placeholder="Phone" required />
+        <input [(ngModel)]="driver.drivingLicense" name="drivingLicense" placeholder="License Number" required />
+        <input type="number" [(ngModel)]="driver.experienceYears" name="experienceYears" placeholder="Experience (Years)" />
+
+        <label>
+          <input type="checkbox" [(ngModel)]="driver.isAvailable" name="isAvailable" />
+          Available
+        </label>
+
+        <button type="submit">{{ driver.id ? 'Update' : 'Add' }}</button>
+      </form>
+    </div>
+  </div>
+</div>

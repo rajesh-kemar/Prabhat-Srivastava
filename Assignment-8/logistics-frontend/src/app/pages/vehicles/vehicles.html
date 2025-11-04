@@ -1,0 +1,61 @@
+<h2 class="page-title">Vehicles List</h2>
+
+<div class="vehicle-container">
+  <!-- Top Header with Add Button -->
+  <div class="vehicle-header">
+    <button class="open-modal-btn" (click)="openModal()">+ Add Vehicle</button>
+  </div>
+
+  <!-- Vehicle Table -->
+  <div class="vehicle-table">
+    <table class="tablew">
+      <thead>
+        <tr>
+          <th>Number Plate</th>
+          <th>Type</th>
+          <th>Capacity</th>
+          <th>Source</th>
+          <th>Destination</th>
+          <th>Available</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of filteredVehicles">
+          <td>{{ v.numberPlate }}</td>
+          <td>{{ v.type }}</td>
+          <td>{{ v.capacity }}</td>
+          <td>{{ v.source }}</td>
+          <td>{{ v.destination }}</td>
+          <td>{{ v.isAvailable ? 'Yes' : 'No' }}</td>
+          <td>
+            <button class="edit" (click)="openModal(v)">Edit</button>
+            <button class="delete" (click)="deleteVehicle(v.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal for Add/Edit Vehicle -->
+<div class="modal" [class.show-modal]="showModal">
+  <div class="modal-content">
+    <span class="close-btn" (click)="closeModal()">&times;</span>
+    <h2>{{ vehicle.id ? 'Edit Vehicle' : 'Add Vehicle' }}</h2>
+
+    <form (ngSubmit)="saveVehicle()">
+      <input [(ngModel)]="vehicle.numberPlate" name="numberPlate" placeholder="Number Plate" required>
+      <input [(ngModel)]="vehicle.type" name="type" placeholder="Type" required>
+      <input type="number" [(ngModel)]="vehicle.capacity" name="capacity" placeholder="Capacity" required>
+      <input [(ngModel)]="vehicle.source" name="source" placeholder="Source">
+      <input [(ngModel)]="vehicle.destination" name="destination" placeholder="Destination">
+
+      <label>
+        <input type="checkbox" [(ngModel)]="vehicle.isAvailable" name="isAvailable"> Available
+      </label>
+
+      <button type="submit">{{ vehicle.id ? 'Update Vehicle' : 'Add Vehicle' }}</button>
+    </form>
+  </div>
+</div>

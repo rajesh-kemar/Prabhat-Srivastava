@@ -1,0 +1,90 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <!-- 👤 Header -->
+    <div class="profile-header">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        alt="Profile Avatar"
+        class="profile-avatar"
+      />
+      <h2>{{ user.username || user.name || 'User Name' }}</h2>
+      <p>{{ user.role }}</p>
+    </div>
+
+    <!-- 🧾 Account Info -->
+    <div class="profile-details">
+      <h3>Account Information</h3>
+      <p><strong>Role:</strong> {{ user.role || 'N/A' }}</p>
+      <p><strong>Status:</strong> Active</p>
+    </div>
+
+    <!-- 🚗 Driver Info Section -->
+    <div *ngIf="user.role === 'Driver'" class="profile-extra">
+      <h3>🚗 My Summary</h3>
+
+      <!-- 🌟 Stylish Stats Section -->
+      <div class="stats">
+        <div class="stat-card">
+          <h4>Total Trips</h4>
+          <p>{{ totalTrips }}</p>
+        </div>
+        <div class="stat-card">
+          <h4>Assigned Vehicle</h4>
+          <p>{{ totalVehicles }}</p>
+        </div>
+      </div>
+
+      <h3>🚘 Assigned Vehicle Details</h3>
+      <div *ngIf="driverVehicle; else noVehicle">
+        <p><strong>Number Plate:</strong> {{ driverVehicle.numberPlate }}</p>
+        <p><strong>Model:</strong> {{ driverVehicle.model }}</p>
+        <p><strong>Type:</strong> {{ driverVehicle.type }}</p>
+        <p><strong>Capacity:</strong> {{ driverVehicle.capacity }}</p>
+      </div>
+      <ng-template #noVehicle>
+        <p>No vehicle assigned yet.</p>
+      </ng-template>
+
+      <h3>🧭 My Trips</h3>
+      <div *ngIf="driverTrips.length > 0; else noTrips">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Destination</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Duration (hrs)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let trip of driverTrips">
+              <td>{{ trip.source }}</td>
+              <td>{{ trip.destination }}</td>
+              <td>{{ trip.startTime | date:'dd/MM/yy, h:mm a' }}</td>
+              <td>{{ trip.endTime ? (trip.endTime | date:'dd/MM/yy, h:mm a') : '-' }}</td>
+              <td>{{ trip.durationHours ? (trip.durationHours | number:'1.2-2') : '-' }}</td>
+              <td>
+                <span [style.color]="trip.endTime ? 'lightgreen' : '#ffd966'">
+                  {{ trip.endTime ? 'Completed' : 'In Progress' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noTrips>
+        <p>No trips assigned yet.</p>
+      </ng-template>
+    </div>
+
+    <!-- 🧭 Dispatcher Quick Access -->
+    <div *ngIf="user.role === 'Dispatcher'" class="profile-links">
+      <h3>Quick Access</h3>
+      <button (click)="goToPage('/drivers')">Manage Drivers</button>
+      <button (click)="goToPage('/vehicles')">Manage Vehicles</button>
+      <button (click)="goToPage('/trips')">Manage Trips</button>
+    </div>
+  </div>
+</div>

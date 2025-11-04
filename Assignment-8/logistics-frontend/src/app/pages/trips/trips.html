@@ -1,0 +1,88 @@
+<h2 style="text-align: center; font-size: 30px; margin-top: 30px; font-weight: bold;">
+  Trips Management
+</h2>
+
+<div class="top-bar" *ngIf="role === 'Dispatcher'">
+  <button class="add-trip-btn" (click)="openTripModal()">➕ Add Trip</button>
+</div>
+
+<div class="trip-container">
+  <div class="trip-table">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 120px;">Driver</th>
+          <th style="width: 120px;">Vehicle</th>
+          <th style="width: 150px;">Start Time</th>
+          <th style="width: 150px;">End Time</th>
+          <th style="width: 130px;">Duration (HH:mm:ss)</th>
+          <th style="width: 120px;">Duration (8h/days)</th>
+          <th style="width: 130px;">Source</th>
+          <th style="width: 130px;">Destination</th>
+          <th style="width: 110px;">Status</th>
+          <th style="width: 160px; text-align:center;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of filteredTrips">
+          <td>{{ t.driver?.name || '-' }}</td>
+          <td>{{ t.vehicle?.numberPlate || '-' }}</td>
+          <td>{{ t.startTime | date:'dd/MM/yy hh:mm a' }}</td>
+          <td>{{ t.endTime ? (t.endTime | date:'dd/MM/yy hh:mm a') : '-' }}</td>
+          <td>{{ t.durationFormatted || '-' }}</td>
+          <td>{{ t.durationDays || '-' }}</td>
+          <td>{{ t.source }}</td>
+          <td>{{ t.destination }}</td>
+          <td>
+            <span [style.color]="t.endTime ? 'green' : 'orange'" class="stylecolor">
+              {{ t.endTime ? 'Completed' : 'In Progress' }}
+            </span>
+          </td>
+          <td style="text-align:center;">
+            <button class="edit" (click)="editTrip(t)">Edit</button>
+            <button class="delete" *ngIf="role === 'Dispatcher'" (click)="deleteTrip(t.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" [class.show]="showTripModal" *ngIf="showTripModal">
+  <div class="modal-content">
+    <h2>{{ trip.id ? 'Edit Trip' : 'Add New Trip' }}</h2>
+
+    <form (ngSubmit)="saveTrip()" #tripForm="ngForm">
+      <label>Driver</label>
+      <select [(ngModel)]="trip.driverId" name="driverId" required [disabled]="role === 'Driver'">
+        <option value="">-- Select Driver --</option>
+        <option *ngFor="let d of drivers" [value]="d.id">{{ d.name }}</option>
+      </select>
+
+      <label>Vehicle</label>
+      <select [(ngModel)]="trip.vehicleId" name="vehicleId" required [disabled]="role === 'Driver'">
+        <option value="">-- Select Vehicle --</option>
+        <option *ngFor="let v of vehicles" [value]="v.id">{{ v.numberPlate }}</option>
+      </select>
+
+      <label>Start Time</label>
+      <input type="datetime-local" [(ngModel)]="trip.startTime" name="startTime"
+             required [readonly]="role === 'Driver'">
+
+      <label *ngIf="trip.id">End Time (Mark as Completed)</label>
+      <input *ngIf="trip.id" type="datetime-local" [(ngModel)]="trip.endTime" name="endTime">
+
+      <label>Source</label>
+      <input type="text" [(ngModel)]="trip.source" name="source" required [readonly]="role === 'Driver'">
+
+      <label>Destination</label>
+      <input type="text" [(ngModel)]="trip.destination" name="destination" required [readonly]="role === 'Driver'">
+
+      <div class="modal-actions">
+        <button type="submit" class="save-btn">Save</button>
+        <button type="button" (click)="closeTripModal()" class="cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

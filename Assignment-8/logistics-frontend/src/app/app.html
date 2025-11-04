@@ -1,0 +1,38 @@
+<ng-container *ngIf="showNavbar">
+  <nav class="main-nav">
+    <!-- Left side (Brand Name / Logo) -->
+    <div class="nav-left">
+      <a (click)="navigateHome()" class="brand-name">Travel Management</a>
+    </div>
+
+    <!-- Right side -->
+    <div class="nav-right">
+      <ng-container *ngIf="user; else guestLinks">
+        <!-- ✅ Username Click (Profile Navigation) -->
+        <span
+          class="username-display"
+          (click)="goToProfile()"
+          title="View Profile"
+        >
+          Welcome, {{ user?.username }}
+        </span>
+
+        <!-- Links -->
+        <a routerLink="/dashboard">Dashboard</a>
+        <a *ngIf="user.role === 'Dispatcher'" routerLink="/drivers">Drivers</a>
+        <a *ngIf="user.role === 'Dispatcher'" routerLink="/vehicles">Vehicles</a>
+        <a routerLink="/trips">Trips</a>
+
+        <!-- Logout -->
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </ng-container>
+
+      <ng-template #guestLinks>
+        <button class="login-btn" (click)="router.navigate(['/login'])">Login</button>
+      </ng-template>
+    </div>
+  </nav>
+</ng-container>
+
+<!-- Page Content -->
+<router-outlet></router-outlet>

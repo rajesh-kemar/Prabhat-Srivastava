@@ -1,0 +1,193 @@
+/* 🌈 Background and layout */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 93.5vh;
+  width: 100%;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background-attachment: fixed;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden; /* ✅ No scrollbars ever */
+}
+
+/* 💎 Profile Card */
+.profile-card {
+  width: 480px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 22px;
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.25);
+  padding: 30px;
+  text-align: center;
+  color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.profile-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* 🧑 Header */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.profile-avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.08);
+}
+
+.profile-header h2 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.profile-header p {
+  font-size: 1rem;
+  color: #d1e8ff;
+  font-weight: 500;
+}
+
+/* 📄 Info sections */
+.profile-details,
+.profile-extra {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.profile-details h3,
+.profile-extra h3 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 6px;
+}
+
+.profile-details p,
+.profile-extra p {
+  color: #e4f2ff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* 🚚 Mini Table for Trips */
+.mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mini-table th {
+  background-color: rgba(106, 17, 203, 0.9);
+  color: white;
+  padding: 10px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mini-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f2f6ff;
+}
+
+.mini-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ⚡ Dispatcher Buttons */
+.profile-links {
+  text-align: center;
+}
+
+.profile-links h3 {
+  color: #fff;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.profile-links button {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  margin: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+  letter-spacing: 0.5px;
+}
+
+.profile-links button:hover {
+  background: linear-gradient(135deg, #4facfe, #0072ff);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* 🚫 Hide all scrollbars globally */
+html, body {
+  height: 100%;
+  overflow: hidden !important; /* ✅ No scroll anywhere */
+}
+
+/* Optional — for browsers that still show scrollbar track */
+::-webkit-scrollbar {
+  display: none; /* ✅ Chrome, Edge, Safari */
+}
+* {
+  scrollbar-width: none; /* ✅ Firefox */
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .profile-card {
+    width: 100%;
+    max-width: 360px;
+    padding: 22px;
+  }
+
+  .profile-avatar {
+    width: 110px;
+    height: 110px;
+  }
+
+  .profile-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .profile-links button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}

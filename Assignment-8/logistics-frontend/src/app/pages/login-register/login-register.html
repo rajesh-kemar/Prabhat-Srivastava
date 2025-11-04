@@ -1,0 +1,29 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <a routerLink="/home" class="logo">Travel Management</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <div class="login-container">
+    <h2>{{ isRegisterMode ? 'Register' : 'Login' }}</h2>
+
+    <form (ngSubmit)="submit()">
+      <input [(ngModel)]="username" name="username" placeholder="Username" required />
+      <input type="password" [(ngModel)]="password" name="password" placeholder="Password" required />
+
+      <div *ngIf="isRegisterMode">
+        <label>Select Role:</label>
+        <select [(ngModel)]="role" name="role">
+          <option value="Driver">Driver</option>
+        </select>
+      </div>
+
+      <button type="submit">{{ isRegisterMode ? 'Register' : 'Login' }}</button>
+    </form>
+
+    <p (click)="toggleMode()" class="toggle-text">
+      {{ isRegisterMode ? 'Already have an account? Login' : 'New user? Register here' }}
+    </p>
+  </div>
+</div>
