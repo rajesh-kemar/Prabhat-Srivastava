@@ -31,31 +31,45 @@ export class DriversComponent implements OnInit {
     experienceYears: 0,
     isAvailable: true
   };
-
+  
   private apiUrl = 'http://localhost:5023/api/Drivers';
-  isModalVisible: boolean = false; // Modal visibility state
+  isModalVisible: boolean = false;
+  filter: string = 'all';
+  currentUser: any;
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.loadDrivers();
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+    this.route.queryParams.subscribe(params => {
+      this.filter = params['filter'] || 'all';
+      this.loadDrivers();
+    });
   }
 
   private getAuthHeaders() {
-    const token = JSON.parse(localStorage.getItem('currentUser') || '{}')?.token;
+    const token = this.currentUser?.token;
     return { headers: { Authorization: `Bearer ${token}` } };
   }
 
-  loadDrivers(): void {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const role = currentUser?.role;
+  private applyFilter(drivers: Driver[]): Driver[] {
+    let result = (this.currentUser.role === 'Driver')
+      ? drivers.filter(d => d.name === this.currentUser.username)
+      : [...drivers];
 
+    if (this.filter === 'available') {
+      result = result.filter(d => d.isAvailable);
+    }
+
+    return result;
+  }
+
+  loadDrivers(): void {
     this.http.get<Driver[]>(this.apiUrl, this.getAuthHeaders()).subscribe({
       next: (data) => {
         this.drivers = data.sort((a, b) => Number(b.isAvailable) - Number(a.isAvailable));
-        this.filteredDrivers = (role === 'Driver')
-          ? this.drivers.filter(d => d.name === currentUser?.username)
-          : [...this.drivers];
+        this.filteredDrivers = this.applyFilter(this.drivers);
       },
       error: (err) => console.error('Error loading drivers:', err)
     });
@@ -64,29 +78,44 @@ export class DriversComponent implements OnInit {
   saveDriver(): void {
     if (this.driver.id) {
       this.http.put(`${this.apiUrl}/${this.driver.id}`, this.driver, this.getAuthHeaders())
-        .subscribe(() => { this.loadDrivers(); this.resetDriver(); this.closeModal(); });
+        .subscribe(() => {
+          this.loadDrivers();
+          this.resetDriver();
+          this.closeModal();
+        });
     } else {
       this.http.post(this.apiUrl, this.driver, this.getAuthHeaders())
-        .subscribe(() => { this.loadDrivers(); this.resetDriver(); this.closeModal(); });
+        .subscribe(() => {
+          this.loadDrivers();
+          this.resetDriver();
+          this.closeModal();
+        });
     }
   }
 
-  editDriver(d: Driver): void { 
-    this.driver = { ...d }; 
+  editDriver(d: Driver): void {
+    this.driver = { ...d };
     this.openModal();
   }
 
   deleteDriver(id?: number): void {
     if (!id) return;
-    this.http.delete(`${this.apiUrl}/${id}`, this.getAuthHeaders())
-      .subscribe(() => this.loadDrivers());
+    if (confirm('Are you sure you want to delete this driver?')) {
+      this.http.delete(`${this.apiUrl}/${id}`, this.getAuthHeaders())
+        .subscribe(() => this.loadDrivers());
+    }
   }
 
   private resetDriver(): void {
-    this.driver = { name: '', phone: '', drivingLicense: '', experienceYears: 0, isAvailable: true };
+    this.driver = {
+      name: '',
+      phone: '',
+      drivingLicense: '',
+      experienceYears: 0,
+      isAvailable: true
+    };
   }
 
-  // Modal control methods
   openModal(): void {
     this.isModalVisible = true;
   }

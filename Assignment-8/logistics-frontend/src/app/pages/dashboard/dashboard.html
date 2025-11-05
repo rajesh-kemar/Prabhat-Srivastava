@@ -1,59 +1,63 @@
 <div class="bground">
+  <!-- Dashboard Title -->
   <h2 class="dashboard-title">
     {{ role === 'Dispatcher' ? 'Dispatcher Dashboard Overview' : 'Driver Dashboard Overview' }}
   </h2>
 
+  <!-- Dashboard Cards Grid -->
   <div class="dashboard-grid">
 
     <!-- Dispatcher Dashboard Cards -->
     <ng-container *ngIf="role === 'Dispatcher'">
-      <div class="dashboard-card active-trips" (click)="navigateTo('trips', 'active')">
+      <div class="dashboard-card active-trips" (click)="navigateTo('trips','active')">
         <h3>Active Trips</h3>
         <p>{{ activeTrips }}</p>
       </div>
 
-      <div class="dashboard-card completed-trips" (click)="navigateTo('trips', 'completed')">
+      <div class="dashboard-card completed-trips" (click)="navigateTo('trips','completed')">
         <h3>Completed Trips</h3>
         <p>{{ completedTrips }}</p>
       </div>
 
-      <div class="dashboard-card total-vehicles" (click)="navigateTo('vehicles', 'all')">
+      <div class="dashboard-card total-vehicles" (click)="navigateTo('vehicles','all')">
         <h3>Total Vehicles</h3>
         <p>{{ totalVehicles }}</p>
       </div>
 
-      <div class="dashboard-card available-vehicles" (click)="navigateTo('vehicles', 'available')">
+      <div class="dashboard-card available-vehicles" (click)="navigateTo('vehicles','available')">
         <h3>Available Vehicles</h3>
         <p>{{ availableVehicles }}</p>
       </div>
 
-      <div class="dashboard-card total-drivers" (click)="navigateTo('drivers', 'all')">
+      <div class="dashboard-card total-drivers" (click)="navigateTo('drivers','all')">
         <h3>Total Drivers</h3>
         <p>{{ totalDrivers }}</p>
       </div>
 
-      <div class="dashboard-card available-drivers" (click)="navigateTo('drivers', 'available')">
+      <div class="dashboard-card available-drivers" (click)="navigateTo('drivers','available')">
         <h3>Available Drivers</h3>
         <p>{{ availableDrivers }}</p>
       </div>
     </ng-container>
 
-    <!-- ✅ Driver Dashboard Cards -->
+    <!-- Driver Dashboard Cards -->
     <ng-container *ngIf="role === 'Driver'">
-      <div class="dashboard-card active-trips" (click)="navigateTo('trips', 'active')">
+      <div class="dashboard-card active-trips" (click)="navigateTo('trips','active')">
         <h3>Active Trips</h3>
         <p>{{ activeTrips }}</p>
       </div>
 
-      <div class="dashboard-card completed-trips" (click)="navigateTo('trips', 'completed')">
+      <div class="dashboard-card completed-trips" (click)="navigateTo('trips','completed')">
         <h3>Completed Trips</h3>
         <p>{{ completedTrips }}</p>
       </div>
 
-      <div class="dashboard-card driving-hours clickable" (click)="viewCompletedTrips()">
+      <div class="dashboard-card driving-hours" (click)="navigateTo('trips','completed')">
         <h3>Total Driving Hours</h3>
         <p>{{ totalDrivingHours }} hrs</p>
       </div>
+
     </ng-container>
+
   </div>
 </div>

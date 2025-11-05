@@ -59,15 +59,17 @@ export class TripsComponent implements OnInit {
   }
 
   private getAuthHeaders() {
-    const token = JSON.parse(localStorage.getItem('currentUser') || '{}')?.token;
-    return { headers: { Authorization: `Bearer ${token}` } };
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    return { headers: { Authorization: `Bearer ${user.token || user.accessToken}` } };
   }
 
   private formatSecondsToHHMMSS(totalSeconds: number): string {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
   }
 
   loadAllData(): void {
@@ -78,15 +80,15 @@ export class TripsComponent implements OnInit {
 
   getDrivers(): void {
     this.http.get<Driver[]>(this.driverUrl, this.getAuthHeaders()).subscribe({
-      next: (data) => (this.drivers = data.filter(d => d.isAvailable)),
-      error: (err) => console.error('Error loading drivers:', err)
+      next: (data) => (this.drivers = data.filter((d) => d.isAvailable)),
+      error: () => alert('Failed to load drivers')
     });
   }
 
   getVehicles(): void {
     this.http.get<Vehicle[]>(this.vehicleUrl, this.getAuthHeaders()).subscribe({
-      next: (data) => (this.vehicles = data.filter(v => v.isAvailable)),
-      error: (err) => console.error('Error loading vehicles:', err)
+      next: (data) => (this.vehicles = data.filter((v) => v.isAvailable)),
+      error: () => alert('Failed to load vehicles')
     });
   }
 
@@ -94,18 +96,16 @@ export class TripsComponent implements OnInit {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const role = currentUser?.role;
     const driverId = currentUser?.id;
-    const endpoint = role === 'Driver' ? `${this.tripUrl}/MyTrips` : this.tripUrl;
+    const endpoint = this.tripUrl;
 
     this.http.get<Trip[]>(endpoint, this.getAuthHeaders()).subscribe({
       next: (data) => {
-        this.trips = role === 'Driver' ? data.filter(t => t.driverId === driverId) : data;
-
-        this.trips.forEach(t => {
+        this.trips = role === 'Driver' ? data.filter((t) => t.driverId === driverId) : data;
+        this.trips.forEach((t) => {
           if (t.startTime && t.endTime) {
             const start = new Date(t.startTime).getTime();
             const end = new Date(t.endTime).getTime();
             const totalSeconds = Math.floor((end - start) / 1000);
-
             t.durationFormatted = this.formatSecondsToHHMMSS(totalSeconds);
             t.durationDays = +(totalSeconds / 3600 / 8).toFixed(2);
           } else {
@@ -113,21 +113,22 @@ export class TripsComponent implements OnInit {
             t.durationDays = 0;
           }
         });
-
-        // Filter trips by query params
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.subscribe((params) => {
           const filter = params['filter'];
-          if (filter === 'active') this.filteredTrips = this.trips.filter(t => !t.endTime);
-          else if (filter === 'completed') this.filteredTrips = this.trips.filter(t => !!t.endTime);
+          if (filter === 'active') this.filteredTrips = this.trips.filter((t) => !t.endTime);
+          else if (filter === 'completed') this.filteredTrips = this.trips.filter((t) => !!t.endTime);
           else this.filteredTrips = [...this.trips];
         });
       },
-      error: (err) => console.error('Error loading trips:', err)
+      error: () => alert('Failed to load trips')
     });
   }
 
   openTripModal(): void {
-    if (this.role !== 'Dispatcher') return;
+    if (this.role !== 'Dispatcher') {
+      alert('Only dispatcher can add trips');
+      return;
+    }
     this.resetTrip();
     this.showTripModal = true;
   }
@@ -142,25 +143,34 @@ export class TripsComponent implements OnInit {
     this.showTripModal = false;
   }
 
+  private isTripValid(): boolean {
+    if (!this.trip.driverId || !this.trip.vehicleId) {
+      alert('Select driver and vehicle');
+      return false;
+    }
+    if (!this.trip.startTime?.trim() || !this.trip.source?.trim() || !this.trip.destination?.trim()) {
+      alert('All fields are required');
+      return false;
+    }
+    return true;
+  }
+
   saveTrip(): void {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const role = currentUser?.role || '';
 
-    if (this.trip.id && this.trip.endTime) {
-      const id = this.trip.id;
-      const payload = { endTime: this.trip.endTime || new Date().toISOString() };
-      const url = `${this.tripUrl}/complete/${id}`;
+    if (!this.isTripValid()) return;
 
+    if (this.trip.id && this.trip.endTime) {
+      const url = `${this.tripUrl}/complete/${this.trip.id}`;
+      const payload = { endTime: this.trip.endTime };
       this.http.put(url, payload, this.getAuthHeaders()).subscribe({
         next: (res: any) => {
-          alert(res?.message || 'Trip completed successfully!');
+          alert(res?.message || 'Trip completed');
           this.getTrips();
           this.closeTripModal();
         },
-        error: (err) => {
-          console.error('Error completing trip:', err);
-          alert('Failed to complete trip.');
-        }
+        error: () => alert('Failed to complete trip')
       });
       return;
     }
@@ -169,33 +179,29 @@ export class TripsComponent implements OnInit {
       const request = this.trip.id
         ? this.http.put(`${this.tripUrl}/${this.trip.id}`, this.trip, this.getAuthHeaders())
         : this.http.post(this.tripUrl, this.trip, this.getAuthHeaders());
-
       request.subscribe({
         next: () => {
-          alert('Trip saved successfully!');
+          alert(this.trip.id ? 'Trip updated' : 'Trip created');
           this.getTrips();
           this.closeTripModal();
         },
-        error: (err) => {
-          console.error('Error saving trip:', err);
-          alert('Failed to save trip.');
-        }
+        error: () => alert('Failed to save trip')
       });
     } else {
-      alert('Only a dispatcher can add or modify trips.');
+      alert('Only dispatcher can modify trips');
     }
   }
 
   deleteTrip(id?: number): void {
     if (!id || this.role !== 'Dispatcher') return;
-    if (!confirm('Are you sure you want to delete this trip?')) return;
+    if (!confirm('Are you sure?')) return;
 
     this.http.delete(`${this.tripUrl}/${id}`, this.getAuthHeaders()).subscribe({
       next: () => {
-        alert('Trip deleted successfully.');
+        alert('Trip deleted');
         this.getTrips();
       },
-      error: (err) => console.error('Error deleting trip:', err)
+      error: () => alert('Failed to delete trip')
     });
   }
 

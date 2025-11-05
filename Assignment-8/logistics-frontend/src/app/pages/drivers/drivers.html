@@ -1,22 +1,12 @@
-<h2
-  style="
-    text-align: center;
-    font-size: 30px;
-    margin-top: 30px;
-    font-weight: bold;
-  "
->
+<h2 style="text-align: center; font-size: 30px; margin-top: 30px; font-weight: bold;">
   Drivers List
 </h2>
 
 <div class="driver-container">
-
-  <!-- Add Driver Button at Top -->
   <div class="driver-header">
     <button class="open-modal-btn" (click)="openModal()">+ Add Driver</button>
   </div>
 
-  <!-- Driver Table -->
   <div class="driver-table">
     <table class="tablew">
       <thead>
@@ -35,7 +25,9 @@
           <td>{{ d.phone }}</td>
           <td>{{ d.drivingLicense }}</td>
           <td>{{ d.experienceYears }}</td>
-          <td>{{ d.isAvailable ? 'Yes' : 'No' }}</td>
+          <td [style.color]="d.isAvailable ? 'green' : 'red'" style="font-weight: 600;">
+            {{ d.isAvailable ? 'Yes' : 'No' }}
+          </td>
           <td class="action-buttons">
             <button class="edit" (click)="editDriver(d)">Edit</button>
             <button class="delete" (click)="deleteDriver(d.id)">Delete</button>
@@ -45,24 +37,63 @@
     </table>
   </div>
 
-  <!-- Modal Popup -->
-  <div class="modal" [ngClass]="{'show-modal': isModalVisible}">
+  <div class="modal" [class.show-modal]="isModalVisible">
     <div class="modal-content">
       <span class="close-btn" (click)="closeModal()">&times;</span>
-      <h2>{{ driver.id ? 'Edit' : 'Add' }} Driver</h2>
+      <h2>{{ driver.id ? 'Edit Driver' : 'Add Driver' }}</h2>
 
-      <form (ngSubmit)="saveDriver()">
-        <input [(ngModel)]="driver.name" name="name" placeholder="Driver Name" required />
-        <input [(ngModel)]="driver.phone" name="phone" placeholder="Phone" required />
-        <input [(ngModel)]="driver.drivingLicense" name="drivingLicense" placeholder="License Number" required />
-        <input type="number" [(ngModel)]="driver.experienceYears" name="experienceYears" placeholder="Experience (Years)" />
+      <form #driverForm="ngForm" (ngSubmit)="driverForm.valid && saveDriver()">
+        <input [(ngModel)]="driver.name" name="name" placeholder="Driver Name" required #name="ngModel" />
+        <div *ngIf="name.invalid && name.touched" class="error-text">
+          Driver name is required.
+        </div>
 
-        <label>
+        <input
+          [(ngModel)]="driver.phone"
+          name="phone"
+          placeholder="Phone (10 digits)"
+          required
+          pattern="^[0-9]{10}$"
+          #phone="ngModel"
+        />
+        <div *ngIf="phone.invalid && phone.touched" class="error-text">
+          <span *ngIf="phone.errors?.['required']">Phone number is required.</span>
+          <span *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit phone number.</span>
+        </div>
+
+        <input
+          [(ngModel)]="driver.drivingLicense"
+          name="drivingLicense"
+          placeholder="License Number"
+          required
+          #license="ngModel"
+        />
+        <div *ngIf="license.invalid && license.touched" class="error-text">
+          Driving license number is required.
+        </div>
+
+        <input
+          type="number"
+          [(ngModel)]="driver.experienceYears"
+          name="experienceYears"
+          placeholder="Experience (Years)"
+          min="0"
+          required
+          #experience="ngModel"
+        />
+        <div *ngIf="experience.invalid && experience.touched" class="error-text">
+          <span *ngIf="experience.errors?.['required']">Experience is required.</span>
+          <span *ngIf="experience.errors?.['min']">Experience cannot be negative.</span>
+        </div>
+
+        <label style="margin-top: 10px;">
           <input type="checkbox" [(ngModel)]="driver.isAvailable" name="isAvailable" />
           Available
         </label>
 
-        <button type="submit">{{ driver.id ? 'Update' : 'Add' }}</button>
+        <button type="submit" [disabled]="!driverForm.valid">
+          {{ driver.id ? 'Update' : 'Add' }}
+        </button>
       </form>
     </div>
   </div>

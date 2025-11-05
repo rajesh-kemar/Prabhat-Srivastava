@@ -22,10 +22,6 @@ interface Trip {
   vehicleId: number;
   startTime: string;
   endTime?: string;
-  source: string;
-  destination: string;
-  driver?: Driver;
-  vehicle?: Vehicle;
   durationHours?: number;
 }
 
@@ -40,21 +36,23 @@ export class DashboardComponent implements OnInit {
   currentUser: any;
   role: string = '';
 
+  // Dashboard data holders
   drivers: Driver[] = [];
   vehicles: Vehicle[] = [];
   trips: Trip[] = [];
 
-  activeTrips: number = 0;
-  completedTrips: number = 0;
-  totalDrivingHours: number = 0;
-  totalDrivers: number = 0;
-  availableDrivers: number = 0;
-  totalVehicles: number = 0;
-  availableVehicles: number = 0;
+  // Dispatcher Stats
+  totalDrivers = 0;
+  availableDrivers = 0;
+  totalVehicles = 0;
+  availableVehicles = 0;
+  activeTrips = 0;
+  completedTrips = 0;
 
-  showTripDetails: boolean = false;
-  completedTripDetails: Trip[] = [];
+  // Driver Stats
+  totalDrivingHours = 0;
 
+  // Backend API endpoints
   private driverUrl = 'http://localhost:5023/api/Drivers';
   private vehicleUrl = 'http://localhost:5023/api/Vehicles';
   private tripUrl = 'http://localhost:5023/api/Trips';
@@ -62,26 +60,28 @@ export class DashboardComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
+    // Fetch current user from local storage
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.role = this.currentUser?.role || '';
 
+    // If no user or role → redirect to login
     if (!this.currentUser || !this.role) {
       this.router.navigate(['/login']);
       return;
     }
 
+    // Load data based on role
     this.loadStats();
   }
 
+  // Helper: Add JWT Authorization header
   private getAuthHeaders() {
     const token = this.currentUser?.token;
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return { headers };
+    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
   }
 
-  loadStats(): void {
+  // Load stats based on role
+  loadStats() {
     if (this.role === 'Dispatcher') {
       this.loadAllData();
     } else if (this.role === 'Driver') {
@@ -89,90 +89,92 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  loadAllData(): void {
-    this.loadData(this.driverUrl, 'drivers');
-    this.loadData(this.vehicleUrl, 'vehicles');
-    this.loadData(this.tripUrl, 'trips');
-  }
-
-  loadData(url: string, type: string): void {
-    this.http.get<any[]>(url, this.getAuthHeaders()).subscribe({
-      next: (data) => {
-        if (type === 'drivers') {
-          this.drivers = data;
-          this.totalDrivers = data.length;
-          this.availableDrivers = data.filter(d => d.isAvailable).length;
-        } else if (type === 'vehicles') {
-          this.vehicles = data;
-          this.totalVehicles = data.length;
-          this.availableVehicles = data.filter(v => v.isAvailable).length;
-        } else if (type === 'trips') {
-          this.trips = data;
-          this.activeTrips = data.filter(t => !t.endTime).length;
-          this.completedTrips = data.filter(t => !!t.endTime).length;
-        }
+  // =======================
+  // DISPATCHER DASHBOARD
+  // =======================
+  loadAllData() {
+    // Load Drivers
+    this.http.get<Driver[]>(this.driverUrl, this.getAuthHeaders()).subscribe({
+      next: data => {
+        this.drivers = data;
+        this.totalDrivers = data.length;
+        this.availableDrivers = data.filter(d => d.isAvailable).length;
       },
-      error: (err) => {
-        console.error(`Error loading ${type}:`, err);
-        alert(`Error loading ${type}. Please try again.`);
+      error: err => {
+        console.error('Error loading drivers:', err);
+      }
+    });
+
+    // Load Vehicles
+    this.http.get<Vehicle[]>(this.vehicleUrl, this.getAuthHeaders()).subscribe({
+      next: data => {
+        this.vehicles = data;
+        this.totalVehicles = data.length;
+        this.availableVehicles = data.filter(v => v.isAvailable).length;
+      },
+      error: err => {
+        console.error('Error loading vehicles:', err);
+      }
+    });
+
+    // Load Trips
+    this.http.get<Trip[]>(this.tripUrl, this.getAuthHeaders()).subscribe({
+      next: data => {
+        this.trips = data;
+        this.activeTrips = data.filter(t => !t.endTime).length;
+        this.completedTrips = data.filter(t => !!t.endTime).length;
+      },
+      error: err => {
+        console.error('Error loading trips:', err);
       }
     });
   }
 
-  loadDriverStats(): void {
+  // =======================
+  // DRIVER DASHBOARD
+  // =======================
+  loadDriverStats() {
     const driverId = this.currentUser?.id;
     if (!driverId) return;
 
     this.http.get<Trip[]>(this.tripUrl, this.getAuthHeaders()).subscribe({
-      next: (data) => {
+      next: data => {
         const driverTrips = data.filter(t => t.driverId === driverId);
 
-        this.completedTripDetails = driverTrips
-          .filter(t => t.endTime)
-          .map(t => {
-            const start = new Date(t.startTime).getTime();
-            const end = new Date(t.endTime!).getTime();
-            t.durationHours = Math.round(((end - start) / (1000 * 60 * 60)) * 10) / 10;
-            return t;
-          });
-
-        this.trips = driverTrips;
+        // Active trips
         this.activeTrips = driverTrips.filter(t => !t.endTime).length;
-        this.completedTrips = this.completedTripDetails.length;
-        this.totalDrivingHours = Math.round(
-          this.completedTripDetails.reduce((sum, t) => sum + (t.durationHours || 0), 0) * 10
-        ) / 10;
+
+        // Completed trips
+        const completed = driverTrips.filter(t => !!t.endTime);
+        this.completedTrips = completed.length;
+
+        // Total driving hours
+        this.totalDrivingHours = completed.reduce((sum, t) => {
+          const start = new Date(t.startTime).getTime();
+          const end = new Date(t.endTime!).getTime();
+          return sum + (end - start) / (1000 * 60 * 60);
+        }, 0);
+
+        // Round to 1 decimal
+        this.totalDrivingHours = Math.round(this.totalDrivingHours * 10) / 10;
       },
-      error: (err) => {
-        console.error('Error loading driver trips:', err);
-        alert('Error loading your trips. Please try again.');
+      error: err => {
+        console.error('Error loading driver stats:', err);
       }
     });
   }
 
-  // ✅ Redirect to Trips page for completed trips (Driver)
-  viewCompletedTrips(): void {
-    if (this.role === 'Driver') {
-      this.router.navigate(['/trips'], {
-        queryParams: {
-          filter: 'completed',
-          driverId: this.currentUser.id
-        }
-      });
-    }
-  }
+  // =======================
+  // NAVIGATION HANDLER
+  // =======================
+  navigateTo(type: string, status: string) {
+    let url = '';
 
-  navigateTo(type: string, status: string): void {
-    if (type === 'trips') {
-      this.router.navigate(['/trips'], { queryParams: { filter: status } });
-    } else if (type === 'vehicles') {
-      this.router.navigate(['/vehicles'], { queryParams: { filter: status } });
-    } else if (type === 'drivers') {
-      this.router.navigate(['/drivers'], { queryParams: { filter: status } });
-    }
-  }
+    if (type === 'trips') url = '/trips';
+    else if (type === 'vehicles') url = '/vehicles';
+    else if (type === 'drivers') url = '/drivers';
 
-  closeTripDetails(): void {
-    this.showTripDetails = false;
+    // Add query filter for target view
+    this.router.navigate([url], { queryParams: { filter: status } });
   }
 }

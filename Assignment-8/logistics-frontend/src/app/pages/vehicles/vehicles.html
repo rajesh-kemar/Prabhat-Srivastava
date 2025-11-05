@@ -1,7 +1,7 @@
 <h2 class="page-title">Vehicles List</h2>
 
 <div class="vehicle-container">
-  <!-- Top Header with Add Button -->
+  <!-- Header -->
   <div class="vehicle-header">
     <button class="open-modal-btn" (click)="openModal()">+ Add Vehicle</button>
   </div>
@@ -27,7 +27,9 @@
           <td>{{ v.capacity }}</td>
           <td>{{ v.source }}</td>
           <td>{{ v.destination }}</td>
-          <td>{{ v.isAvailable ? 'Yes' : 'No' }}</td>
+          <td style="font-weight: 600;" [style.color]="v.isAvailable ? 'green' : 'red'">
+            {{ v.isAvailable ? 'Yes' : 'No' }}
+          </td>
           <td>
             <button class="edit" (click)="openModal(v)">Edit</button>
             <button class="delete" (click)="deleteVehicle(v.id)">Delete</button>
@@ -38,24 +40,88 @@
   </div>
 </div>
 
-<!-- Modal for Add/Edit Vehicle -->
+<!-- ✅ Modal -->
 <div class="modal" [class.show-modal]="showModal">
   <div class="modal-content">
     <span class="close-btn" (click)="closeModal()">&times;</span>
     <h2>{{ vehicle.id ? 'Edit Vehicle' : 'Add Vehicle' }}</h2>
 
-    <form (ngSubmit)="saveVehicle()">
-      <input [(ngModel)]="vehicle.numberPlate" name="numberPlate" placeholder="Number Plate" required>
-      <input [(ngModel)]="vehicle.type" name="type" placeholder="Type" required>
-      <input type="number" [(ngModel)]="vehicle.capacity" name="capacity" placeholder="Capacity" required>
-      <input [(ngModel)]="vehicle.source" name="source" placeholder="Source">
-      <input [(ngModel)]="vehicle.destination" name="destination" placeholder="Destination">
+    <!-- ✅ Angular form with validation -->
+    <form #vehicleForm="ngForm" (ngSubmit)="vehicleForm.valid && saveVehicle()">
 
+      <!-- Number Plate -->
+      <input
+        [(ngModel)]="vehicle.numberPlate"
+        name="numberPlate"
+        placeholder="Number Plate"
+        required
+        #numberPlate="ngModel"
+      />
+      <div *ngIf="numberPlate.invalid && numberPlate.touched" class="error-text">
+        Number plate is required.
+      </div>
+
+      <!-- Type -->
+      <input
+        [(ngModel)]="vehicle.type"
+        name="type"
+        placeholder="Type"
+        required
+        #type="ngModel"
+      />
+      <div *ngIf="type.invalid && type.touched" class="error-text">
+        Vehicle type is required.
+      </div>
+
+      <!-- Capacity -->
+      <input
+        type="number"
+        [(ngModel)]="vehicle.capacity"
+        name="capacity"
+        placeholder="Capacity"
+        required
+        min="1"
+        #capacity="ngModel"
+      />
+      <div *ngIf="capacity.invalid && capacity.touched" class="error-text">
+        <span *ngIf="capacity.errors?.['required']">Capacity is required.</span>
+        <span *ngIf="capacity.errors?.['min']">Capacity must be at least 1.</span>
+      </div>
+
+      <!-- Source -->
+      <input
+        [(ngModel)]="vehicle.source"
+        name="source"
+        placeholder="Source"
+        required
+        #source="ngModel"
+      />
+      <div *ngIf="source.invalid && source.touched" class="error-text">
+        Source is required.
+      </div>
+
+      <!-- Destination -->
+      <input
+        [(ngModel)]="vehicle.destination"
+        name="destination"
+        placeholder="Destination"
+        required
+        #destination="ngModel"
+      />
+      <div *ngIf="destination.invalid && destination.touched" class="error-text">
+        Destination is required.
+      </div>
+
+      <!-- Availability -->
       <label>
-        <input type="checkbox" [(ngModel)]="vehicle.isAvailable" name="isAvailable"> Available
+        <input type="checkbox" [(ngModel)]="vehicle.isAvailable" name="isAvailable" />
+        Available
       </label>
 
-      <button type="submit">{{ vehicle.id ? 'Update Vehicle' : 'Add Vehicle' }}</button>
+      <!-- Submit -->
+      <button type="submit" [disabled]="!vehicleForm.valid">
+        {{ vehicle.id ? 'Update Vehicle' : 'Add Vehicle' }}
+      </button>
     </form>
   </div>
 </div>
